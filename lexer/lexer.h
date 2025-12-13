@@ -18,9 +18,10 @@ class Lexer {
         }
 
     char get_current() {
-        if (this->input.empty()) {
-            return '\0';
-        }
-        return this->input.front();
+        return this->input.empty() ? '\0' : this->input.front();
+    }
+
+    void add_token(LexerType _type, std::string_view _value) {
+        this->output.push_back(LexerToken(_type, _value));
     }
 };
