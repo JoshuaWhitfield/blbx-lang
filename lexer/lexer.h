@@ -18,13 +18,27 @@ class Lexer {
         std::regex logical_operator_regex;
         std::regex comparison_operator_regex;
 
+        // literal regex
+        std::regex string_regex;
+        std::regex integer_regex;
+        std::regex float_regex;
+
+        // namespace regex
+        std::regex namespace_regex;
+
     public: 
         Lexer(
             std::string_view _input
         ) : input(_input), 
+
             math_operator_regex(R"((mult|sum|sub|div|mod|exp|incr|decr)\()"),
             logical_operator_regex(R"((and|or|not)\()"),
-            comparison_operator_regex(R"((eq|neq|gt|lt|gteq|lteq)\()")
+            comparison_operator_regex(R"((eq|neq|gt|lt|gteq|lteq)\()"),
+
+            string_regex(R"((["'])(?:.|\n)*?\1)"),
+            integer_regex(R"(d)"),
+
+            namespace_regex()
          {}
 
         char get_current() {
