@@ -7,6 +7,7 @@ enum class LexerType {
     SEMICOLON,
     COLON,
     ASSIGN,
+    NEW_LINE,
 
     // symbols
     OPEN_ARRAY,
@@ -19,7 +20,9 @@ enum class LexerType {
     // keywords 
 
     // operators
-    OPERATOR,
+    LOGICAL_OPERATOR,
+    COMPARISON_OPERATOR,
+    MATH_OPERATOR,
 
     // control-flow
     DECLARATIVE,
