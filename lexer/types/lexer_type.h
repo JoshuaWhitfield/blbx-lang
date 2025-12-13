@@ -1,11 +1,13 @@
 #pragma once 
 
-enum class LexerTypes {
+enum class LexerType {
     // punctuation
     COMMA,
     DOT,
     SEMICOLON,
-    EQUALS,
+    COLON,
+    ASSIGN,
+
     // symbols
     OPEN_ARRAY,
     CLOSE_ARRAY,
@@ -17,10 +19,17 @@ enum class LexerTypes {
     // keywords 
 
     // operators
+    OPERATOR,
 
     // control-flow
+    DECLARATIVE,
 
     // literals
     STRING,
     INTEGER,
+
+    // functions
+    FUNC_DECL,
+    FUNC_CALL,
+    ANON_DECL,
 };
