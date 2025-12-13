@@ -4,23 +4,23 @@
 
 class LexerToken {
     private:
-    LexerType type;
-    std::string_view value;
+        LexerType type;
+        std::string_view value;
 
     public:
-    LexerToken(
-        LexerType _type,
-        std::string_view _value
-    ) {
-        type = _type;
-        value = _value;
-    }
+        LexerToken(
+            LexerType _type,
+            std::string_view _value
+        ) {
+            type = _type;
+            value = _value;
+        }
 
-    LexerType get_type() {
-        return this->type;
-    }
+        LexerType get_type() {
+            return this->type;
+        }
 
-    std::string_view get_value() {
-        return this->value;
-    }
+        std::string_view get_value() {
+            return this->value;
+        }
 };
