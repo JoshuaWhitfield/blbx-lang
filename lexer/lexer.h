@@ -29,6 +29,11 @@ class Lexer {
 
         {}
 
+        const std::vector<LexerToken>& get_output() const {
+            return this->output;
+        }
+
+
         char get_current() {
             return this->input.empty() ? '\0' : this->input.front();
         }
