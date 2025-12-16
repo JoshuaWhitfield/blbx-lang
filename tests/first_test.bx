@@ -1,0 +1,13 @@
+a = 1;
+b = "two"
+c = {}
+d = []
+e = true
+f = false;
+
+func() {
+    print("true");
+    print(true);
+}
+
+func();

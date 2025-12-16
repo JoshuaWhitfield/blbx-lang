@@ -25,5 +25,9 @@ enum class LexerType {
     STRING,
     INTEGER,
     FLOAT, // add lexing later
-    BOOLEAN
+    BOOLEAN,
+
+    // unexpected
+    UNEXPECTED
+
 };

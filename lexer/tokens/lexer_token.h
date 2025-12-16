@@ -19,11 +19,15 @@ class LexerToken {
             line = _line;
         }
 
-        LexerType get_type() {
+        LexerType get_type() const {
             return this->type;
         }
 
-        std::string get_value() {
+        std::string get_value() const {
             return this->value;
+        }
+
+        int get_line() const {
+            return this->line;
         }
 };
