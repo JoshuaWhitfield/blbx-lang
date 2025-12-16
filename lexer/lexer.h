@@ -1,57 +1,43 @@
 #pragma once 
 
-#include <string_view>
+#include <string>
 #include <vector>
 #include <regex>
+#include <cctype>
 #include "./types/lexer_type.h"
 #include "./tokens/lexer_token.h"
 
 class Lexer {
     private:
-        std::string_view input;
+        std::string input;
         std::vector<LexerToken> output;
         int pos = 0;
         int line = 0;
 
-        // operator regex
-        std::regex math_operator_regex;
-        std::regex logical_operator_regex;
-        std::regex comparison_operator_regex;
-
-        // literal regex
-        std::regex string_regex;
-        std::regex integer_regex;
-        std::regex float_regex;
-
-        // namespace regex
-        std::regex namespace_regex;
+        // regex declarations
+        std::regex boolean_regex;
 
     public: 
         Lexer(
-            std::string_view _input
+            std::string _input
         ) : input(_input), 
 
-            math_operator_regex(R"((mult|sum|sub|div|mod|exp|incr|decr)\()"),
-            logical_operator_regex(R"((and|or|not)\()"),
-            comparison_operator_regex(R"((eq|neq|gt|lt|gteq|lteq)\()"),
+            // regex initialization
+            boolean_regex(R"((true|false)(?=\s))")
 
-            string_regex(R"((["'])(?:.|\n)*?\1)"),
-            integer_regex(R"(d)"),
-
-            namespace_regex()
-         {}
+        {}
 
         char get_current() {
             return this->input.empty() ? '\0' : this->input.front();
         }
 
-        void add_token(LexerType _type, std::string_view _value, int _line) {
+        void add_token(LexerType _type, std::string _value, int _line) {
             this->output.push_back(LexerToken(_type, _value, _line));
         }
 
         char consume() {
             char current = this->get_current();
-            this->input.remove_prefix(this->pos + 1);
+            this->input.erase(this->pos);
             return current;
         }
 
@@ -100,7 +86,40 @@ class Lexer {
                     continue;
                 }
 
-                // operators
+                // tokenize strings
+                if (this->get_current() == '\'' || this->get_current() == '\"') {
+                    std::string captured_string;
+                    this->consume();
+                    while ((this->get_current() != '\'' && this->get_current() != '\'') && this->input.size() > 0) {
+                        captured_string += this->get_current();
+                        this->consume();
+                    }
+                    this->add_token(LexerType::STRING, captured_string, line);
+                    if (this->input.size() > 0 && (this->get_current() != '\'' && this->get_current() != '\"')) {
+                        // might need to throw error here eventually.
+                        // for no closing quotation found till EOF...
+                        continue;
+                    }
+                    this->consume();
+                }
+
+                // tokenize integers
+                if (isdigit(this->get_current())) {
+                    std::string captured_integer;
+                    while (isdigit(this->get_current()) && this->input.size() > 0) {
+                        captured_integer += this->get_current();
+                        this->consume();
+                    }
+                    // potential error handling
+                    this->add_token(LexerType::INTEGER, captured_integer, this->line);
+                    this->consume();
+                };
+
+                std::smatch boolean_match;
+                if (std::regex_search(this->input, boolean_match, boolean_regex)) {
+                    
+                }
+
 
             }
         }

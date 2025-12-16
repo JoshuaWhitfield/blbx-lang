@@ -1,17 +1,17 @@
 #pragma once
-#include <string_view>
+#include <string>
 #include "../types/lexer_type.h"
 
 class LexerToken {
     private:
         LexerType type;
-        std::string_view value;
+        std::string value;
         int line;
 
     public:
         LexerToken(
             LexerType _type,
-            std::string_view _value,
+            std::string _value,
             int _line
         ) {
             type = _type;
@@ -23,7 +23,7 @@ class LexerToken {
             return this->type;
         }
 
-        std::string_view get_value() {
+        std::string get_value() {
             return this->value;
         }
 };

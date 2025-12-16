@@ -18,22 +18,12 @@ enum class LexerType {
     OPEN_PAREN,
     CLOSE_PAREN,
 
-    // keywords 
+    // var, func, method, declarative names
+    NAMESPACE,
 
-    // operators
-    MATH_OPERATOR,
-    LOGICAL_OPERATOR,
-    COMPARISON_OPERATOR,
-
-    // control-flow
-    DECLARATIVE,
-
-    // literals
+    // tokenize literals
     STRING,
     INTEGER,
-
-    // functions
-    FUNC_DECL,
-    FUNC_CALL,
-    ANON_DECL,
+    FLOAT, // add lexing later
+    BOOLEAN
 };
