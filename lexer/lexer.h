@@ -16,6 +16,7 @@ class Lexer {
 
         // regex declarations
         std::regex boolean_regex;
+        std::regex identifier_regex;
 
     public: 
         Lexer(
@@ -23,7 +24,8 @@ class Lexer {
         ) : input(_input), 
 
             // regex initialization
-            boolean_regex(R"((true|false)(?=\s))")
+            boolean_regex(R"((true|false)(?=\s))"),
+            identifier_regex(R"(^(?:[A-Za-z_][A-Za-z0-9_]*)(?=\s|$|[,:.=()]))")
 
         {}
 
@@ -113,14 +115,27 @@ class Lexer {
                     // potential error handling
                     this->add_token(LexerType::INTEGER, captured_integer, this->line);
                     this->consume();
+                    continue;
                 };
 
+                // tokenize booleans
                 std::smatch boolean_match;
                 if (std::regex_search(this->input, boolean_match, boolean_regex)) {
-                    
+                    int boolean_length = boolean_match[0].length();
+                    while (boolean_length > 0) this->consume();
+                    this->add_token(LexerType::BOOLEAN, boolean_match[0], this->line);
+                    continue;
                 }
 
+                std::smatch identifier_match;
+                if (std::regex_search(this->input, identifier_match, identifier_regex)) {
+                    std::string value = identifier_match[0];
+                    this->add_token(LexerType::IDENTIFIER, value, this->line);
 
+                    this->input.erase(0, identifier_match[0].length());
+                    continue;
+                }
+                
             }
         }
 };
