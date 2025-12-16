@@ -131,8 +131,8 @@ class Lexer {
                 if (std::regex_search(this->input, identifier_match, identifier_regex)) {
                     std::string value = identifier_match[0];
                     this->add_token(LexerType::NAMESPACE, value, this->line);
-
-                    this->input.erase(0, identifier_match[0].length());
+                    int identifier_length = identifier_match[0].length();
+                    while (identifier_length > 0) this->consume();
                     continue;
                 }
 
