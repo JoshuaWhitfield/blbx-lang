@@ -24,8 +24,8 @@ class Lexer {
         ) : input(_input), 
 
             // regex initialization
-            boolean_regex(R"(^(true|false)(?=\s|$|[,:.=()]))"),
-            identifier_regex(R"(^(?:[A-Za-z_][A-Za-z0-9_]*)(?=\s|$|[,:.=()]))")
+            boolean_regex(R"((true|false)(?=\s|$|[,:.=()]))"),
+            identifier_regex(R"((?:[A-Za-z_][A-Za-z0-9_]*)(?=\s|$|[,:.=()]))")
 
         {}
 
@@ -56,15 +56,14 @@ class Lexer {
             while (input.size() > 0) {
                 // skip empty space
   
-                if (get_current() == ' ' or get_current() == ';') {
-                    std::cout << "empty space" << std::endl;
+                // skip all leading spaces
+                while (!input.empty() && get_current() == ' ') {
                     consume();
-                    continue;
                 }
+
 
                 // tokenize new_line
                 if (get_current() == '\n') {
-                    std::cout << "new line" << std::endl;
                     add_token(LexerType::NEW_LINE, "\n", line);
                     inc_line();
                     consume();
@@ -73,36 +72,80 @@ class Lexer {
 
                 // tokenize punctuation
                 if (get_current() == ':') {
-                    std::cout << "colon" << std::endl;
                     add_token(LexerType::COLON, ":", line);
                     consume();
                     continue;
                 }
 
+                if (get_current() == ';') {
+                    add_token(LexerType::SEMICOLON, ";", line);
+                    consume();
+                    continue;
+                }
+
                 if (get_current() == ',') {
-                    std::cout << "comma" << std::endl;
                     add_token(LexerType::COMMA, ",", line);
                     consume();
                     continue;
                 }
 
                 if (get_current() == '.') {
-                    std::cout << "dot" << std::endl;
                     add_token(LexerType::DOT, ".", line);
                     consume();
                     continue;
                 }
 
                 if (get_current() == '=') {
-                    std::cout << "assign" << std::endl;
                     add_token(LexerType::ASSIGN, "=", line);
                     consume();
                     continue;
                 }
 
+                if (get_current() == '(') {
+                    add_token(LexerType::OPEN_PAREN, "(", line);
+                    consume();
+                    continue;
+                }
+                
+                if (get_current() == ')') {
+                    add_token(LexerType::CLOSE_PAREN, ")", line);
+                    consume();
+                    continue;
+                }
+
+                if (get_current() == '[') {
+                    add_token(LexerType::OPEN_ARRAY, "[", line);
+                    consume();
+                    continue;
+                }
+
+                if (get_current() == ']') {
+                    add_token(LexerType::CLOSE_ARRAY, "]", line);
+                    consume();
+                    continue;
+                }
+
+                if (get_current() == '{') {
+                    add_token(LexerType::OPEN_OBJECT, "{", line);
+                    consume();
+                    continue;
+                }
+
+                if (get_current() == '}') {
+                    add_token(LexerType::CLOSE_OBJECT, "}", line);
+                    consume();
+                    continue;
+                }
+
+                if (get_current() == '>') {
+                    add_token(LexerType::RIGHT_CAROT, ">", line);
+                    consume();
+                    continue;
+                }
+
+
                 // tokenize strings
                 if (get_current() == '\'' || get_current() == '\"') {
-                    std::cout << "string" << std::endl;
                     std::string captured_string;
                     consume();
                     while (input.size() > 0 && get_current() != '\'' && get_current() != '\"') {
@@ -121,7 +164,6 @@ class Lexer {
 
                 // tokenize integers
                 if (isdigit(get_current())) {
-                    std::cout << "integer" << std::endl;
                     std::string captured_integer;
                     while (isdigit(get_current()) && input.size() > 0) {
                         captured_integer += get_current();
@@ -135,20 +177,15 @@ class Lexer {
                 // tokenize booleans
                 std::smatch boolean_match;
                 if (std::regex_search(input, boolean_match, boolean_regex)) {
-                    std::cout << "boolean" << std::endl;
-                    int boolean_length = boolean_match[0].length();
                     std::string captured_boolean = boolean_match[0];
-                    while (boolean_length > 0) {
-                        consume();
-                        boolean_length--;
-                    };
+                    for (size_t i = 0; i < captured_boolean.length(); i++) consume();
                     add_token(LexerType::BOOLEAN, captured_boolean, line);
                     continue;
                 }
 
+
                 std::smatch identifier_match;
                 if (std::regex_search(input, identifier_match, identifier_regex)) {
-                    std::cout << "identifier" << std::endl;
                     std::string value = identifier_match[0];
                     add_token(LexerType::NAMESPACE, value, line);
                     int identifier_length = identifier_match[0].length();

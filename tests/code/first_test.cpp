@@ -10,16 +10,36 @@
 // helper to print token types nicely
 const char* lexer_type_to_string(LexerType type) {
     switch (type) {
-        case LexerType::BOOLEAN:   return "BOOLEAN";
-        case LexerType::INTEGER:   return "INTEGER";
-        case LexerType::STRING:    return "STRING";
-        case LexerType::NAMESPACE: return "NAMESPACE";
-        case LexerType::NEW_LINE:  return "NEW_LINE";
-        case LexerType::COLON:     return "COLON";
-        case LexerType::COMMA:     return "COMMA";
-        case LexerType::DOT:       return "DOT";
-        case LexerType::ASSIGN:    return "ASSIGN";
-        default:                   return "UNKNOWN";
+        // punctuation
+        case LexerType::COMMA:        return "COMMA";
+        case LexerType::DOT:          return "DOT";
+        case LexerType::SEMICOLON:    return "SEMICOLON";
+        case LexerType::COLON:        return "COLON";
+        case LexerType::ASSIGN:       return "ASSIGN";
+        case LexerType::NEW_LINE:     return "NEW_LINE";
+        case LexerType::RIGHT_CAROT:  return "RIGHT_CAROT";
+
+        // symbols
+        case LexerType::OPEN_ARRAY:   return "OPEN_ARRAY";
+        case LexerType::CLOSE_ARRAY:  return "CLOSE_ARRAY";
+        case LexerType::OPEN_OBJECT:  return "OPEN_OBJECT";
+        case LexerType::CLOSE_OBJECT: return "CLOSE_OBJECT";
+        case LexerType::OPEN_PAREN:   return "OPEN_PAREN";
+        case LexerType::CLOSE_PAREN:  return "CLOSE_PAREN";
+
+        // names
+        case LexerType::NAMESPACE:    return "NAMESPACE";
+
+        // literals
+        case LexerType::STRING:       return "STRING";
+        case LexerType::INTEGER:      return "INTEGER";
+        case LexerType::FLOAT:        return "FLOAT";
+        case LexerType::BOOLEAN:      return "BOOLEAN";
+
+        // unexpected
+        case LexerType::UNEXPECTED:   return "UNEXPECTED";
+
+        default:                      return "UNKNOWN";
     }
 }
 
